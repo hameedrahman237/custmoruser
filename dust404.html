@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamil Nadu Garbage Reward App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            color: #333;
+        }
+        
+        header {
+            background-color: #27ae60;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .page {
+            padding: 25px;
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #27ae60;
+            outline: none;
+        }
+        
+        .file-input-container {
+            position: relative;
+            border: 2px dashed #27ae60;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .file-input-container:hover {
+            background-color: #e8f5e9;
+        }
+        
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-input-icon {
+            font-size: 48px;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        
+        .location-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .location-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .location-status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            background-color: #219653;
+        }
+        
+        .btn-secondary {
+            background-color: #e74c3c;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #c0392b;
+        }
+        
+        .reward-info {
+            text-align: center;
+            padding: 15px;
+            background-color: #fff8e1;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .reward-info h3 {
+            color: #f57c00;
+            margin-bottom: 5px;
+        }
+        
+        .coins {
+            font-size: 32px;
+            font-weight: bold;
+            color: #f57c00;
+            margin: 10px 0;
+        }
+        
+        .preview-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .success-message h3 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #27ae60;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle" onclick="toggleLanguage()">தமிழ்</div>
+    
+    <div class="container">
+        <header>
+            <h1>Clean Tamil Nadu Reward App</h1>
+            <p>Upload garbage images to earn rewards - 10 coins = ₹1</p>
+        </header>
+        
+        <!-- Page 1: Username Entry -->
+        <div class="page active" id="page1">
+            <h2>Enter Your Details</h2>
+            <p>Please provide your username to get started with earning rewards.</p>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" placeholder="Enter your phone number">
+            </div>
+            
+            <button class="btn" onclick="goToPage2()">Next</button>
+            
+            <div class="reward-info">
+                <h3>How it works</h3>
+                <p>1. Upload photos of garbage in your area</p>
+                <p>2. Get location verified</p>
+                <p>3. Earn 10 coins per verified submission</p>
+                <p>4. Redeem coins for cash: 10 coins = ₹1</p>
+            </div>
+        </div>
+        
+        <!-- Page 2: Upload Garbage Image -->
+        <div class="page" id="page2">
+            <h2>Upload Garbage Image</h2>
+            <p>Help keep Tamil Nadu clean and earn rewards.</p>
+            
+            <div class="form-group">
+                <label>Select Garbage Image</label>
+                <div class="file-input-container">
+                    <div class="file-input-icon">📷</div>
+                    <p>Click to select garbage image</p>
+                    <p><small>Supported formats: JPG, PNG</small></p>
+                    <input type="file" class="file-input" id="garbageImage" accept="image/*" onchange="previewImage()">
+                </div>
+            </div>
+            
+            <div class="preview-container">
+                <img id="preview" class="preview-image" alt="Preview of selected garbage image">
+            </div>
+            
+            <div class="form-group">
+                <label>Current Location</label>
+                <button type="button" class="location-btn" onclick="getLocation()">📌 Get Current Location</button>
+                <div class="location-status" id="locationStatus">Location not yet captured</div>
+                <input type="hidden" id="latitude">
+                <input type="hidden" id="longitude">
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <h3>✅ Submission Successful!</h3>
+                <p>You've earned <span class="coins">10</span> coins</p>
+                <p>Your reward: ₹1 has been added to your account</p>
+            </div>
+            
+            <button class="btn" onclick="submitGarbageReport()">Submit Report</button>
+            <button class="btn btn-secondary" onclick="goToPage1()">Back</button>
+            
+            <div class="reward-info">
+                <h3>Your Rewards</h3>
+                <p>Total coins earned: <span class="coins" id="totalCoins">0</span></p>
+                <p>Total cash value: ₹<span id="cashValue">0</span></p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Tamil Nadu Corporation Cleanliness Initiative</p>
+        </footer>
+    </div>
+
+    <script>
+        // Current page state
+        let currentPage = 1;
+        let totalCoins = 0;
+        let userLocation = null;
+        
+        // Page navigation
+        function goToPage1() {
+            document.getElementById('page1').classList.add('active');
+            document.getElementById('page2').classList.remove('active');
+            currentPage = 1;
+        }
+        
+        function goToPage2() {
+            const username = document.getElementById('username').value;
+            const phone = document.getElementById('phone').value;
+            
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+            
+            if (!phone || phone.length !== 10) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+            
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+            currentPage = 2;
+        }
+        
+        // Image preview
+        function previewImage() {
+            const fileInput = document.getElementById('garbageImage');
+            const preview = document.getElementById('preview');
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+        
+        // Get location
+        function getLocation() {
+            const statusElement = document.getElementById('locationStatus');
+            
+            statusElement.textContent = 'Getting location...';
+            
+            if (!navigator.geolocation) {
+                statusElement.textContent = 'Geolocation is not supported by your browser';
+                return;
+            }
+            
+            function success(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                
+                userLocation = { latitude, longitude };
+                
+                statusElement.textContent = `Location captured: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+            }
+            
+            function error() {
+                statusElement.textContent = 'Unable to retrieve your location. Please ensure location services are enabled.';
+            }
+            
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+        
+        // Submit report
+        function submitGarbageReport() {
+            const fileInput = document.getElementById('garbageImage');
+            const statusElement = document.getElementById('locationStatus');
+            
+            if (!fileInput.files || !fileInput.files[0]) {
+                alert('Please select a garbage image to upload');
+                return;
+            }
+            
+            if (!userLocation) {
+                alert('Please capture your location first');
+                return;
+            }
+            
+            // Simulate upload and processing
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // Update rewards
+            totalCoins += 10;
+            document.getElementById('totalCoins').textContent = totalCoins;
+            document.getElementById('cashValue').textContent = totalCoins / 10;
+            
+            // Reset form after 3 seconds
+            setTimeout(() => {
+                fileInput.value = '';
+                document.getElementById('preview').style.display = 'none';
+                successMessage.style.display = 'none';
+                userLocation = null;
+                statusElement.textContent = 'Location not yet captured';
+            }, 3000);
+        }
+        
+        // Tamil language toggle (simplified for demo)
+        function toggleLanguage() {
+            const toggleBtn = document.querySelector('.language-toggle');
+            const isTamil = toggleBtn.textContent === 'English';
+            
+            if (isTamil) {
+                toggleBtn.textContent = 'தமிழ்';
+                document.querySelector('header h1').textContent = 'Clean Tamil Nadu Reward App';
+                document.querySelector('header p').textContent = 'Upload garbage images to earn rewards - 10 coins = ₹1';
+                document.querySelector('#page1 h2').textContent = 'Enter Your Details';
+                document.querySelector('#page1 p').textContent = 'Please provide your username to get started with earning rewards.';
+                document.querySelector('label[for="username"]').textContent = 'Username';
+                document.querySelector('label[for="phone"]').textContent = 'Phone Number';
+                document.querySelector('#page2 h2').textContent = 'Upload Garbage Image';
+                document.querySelector('#page2 p').textContent = 'Help keep Tamil Nadu clean and earn rewards.';
+            } else {
+                toggleBtn.textContent = 'English';
+                document.querySelector('header h1').textContent = 'தமிழ்நாடு சுத்தம் பரிசு பயன்பாடு';
+                document.querySelector('header p').textContent = 'குப்பை படங்களை பதிவேற்றம் செய்து பரிசுகள் பெறுங்கள் - 10 நாணயங்கள் = ₹1';
+                document.querySelector('#page1 h2').textContent = 'உங்கள் விவரங்களை உள்ளிடுக';
+                document.querySelector('#page1 p').textContent = 'பரிசுகள் பெற தொடங்க உங்கள் பயனர் பெயரை提供 வ提供க.';
+                document.querySelector('label[for="username"]').textContent = 'பயனர் பெயர்';
+                document.querySelector('label[for="phone"]').textContent = 'தொலைபேசி எண்';
+                document.querySelector('#page2 h2').textContent = 'குப்பை படத்தை பதிவேற்றம் செய்க';
+                document.querySelector('#page2 p').textContent = 'தமிழ்நாட்டை சுத்தமாக வைத்து பரிசுகள் பெறுங்கள்.';
+            }
+        }
+    </script>
+</body>
+</html>
